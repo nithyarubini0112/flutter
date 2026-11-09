@@ -1,0 +1,88 @@
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: TrafficSignalPage(),
+    );
+  }
+}
+
+class TrafficSignalPage extends StatefulWidget {
+  const TrafficSignalPage({super.key});
+
+  @override
+  State<TrafficSignalPage> createState() =>
+      _TrafficSignalPageState();
+}
+
+class _TrafficSignalPageState
+    extends State<TrafficSignalPage> {
+
+  bool isGreen = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Traffic Signal Animation'),
+      ),
+
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: [
+            AnimatedContainer(
+              duration: const Duration(seconds: 1),
+
+              width: isGreen ? 200 : 150,
+              height: isGreen ? 200 : 150,
+
+              decoration: BoxDecoration(
+                color: isGreen
+                    ? Colors.green
+                    : Colors.red,
+
+                borderRadius: BorderRadius.circular(15),
+              ),
+
+              child: Center(
+                child: Text(
+                  isGreen ? 'GO' : 'STOP',
+
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isGreen = !isGreen;
+                });
+              },
+
+              child: const Text('Change Signal'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
