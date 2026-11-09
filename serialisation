@@ -1,0 +1,134 @@
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: EmployeePage(),
+    );
+  }
+}
+
+class Employee {
+  final int id;
+  final String name;
+  final String department;
+
+  Employee({
+    required this.id,
+    required this.name,
+    required this.department,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'department': department,
+    };
+  }
+
+  factory Employee.fromJson(
+      Map<String, dynamic> json) {
+    return Employee(
+      id: json['id'],
+      name: json['name'],
+      department: json['department'],
+    );
+  }
+}
+
+class EmployeePage extends StatefulWidget {
+  const EmployeePage({super.key});
+
+  @override
+  State<EmployeePage> createState() =>
+      _EmployeePageState();
+}
+
+class _EmployeePageState extends State<EmployeePage> {
+
+  final Employee employee = Employee(
+    id: 201,
+    name: 'Ravi',
+    department: 'IT',
+  );
+
+  final List<String> employees = [];
+
+  @override
+  Widget build(BuildContext context) {
+
+    Map<String, dynamic> data = employee.toJson();
+
+    Employee restoredEmployee =
+        Employee.fromJson(data);
+
+    String jsonString = jsonEncode(data);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Employee Record Manager'),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+
+        child: Column(
+          children: [
+            Text(
+              'ID: ${employee.id}\n'
+              'Name: ${employee.name}\n'
+              'Department: ${employee.department}',
+            ),
+
+            const SizedBox(height: 10),
+
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  employees.add(employee.name);
+                });
+              },
+
+              child: const Text('Add Employee'),
+            ),
+
+            Text('JSON: $jsonString'),
+
+            Text(
+              'Restored Employee: ${restoredEmployee.name}',
+            ),
+
+            const Text('Employee List'),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: employees.length,
+
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: const Icon(Icons.person),
+
+                    title: Text(
+                      employees[index],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
